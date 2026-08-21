@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Investment Dashboard"
+description = "A simulated investment rewards dashboard with a tap-to-earn game, deposit plans, bonus spin wheel, profile wallet, leaderboard, and mining rewards."
+version = "1.0.0"
+id = "artifacts/investment-dashboard"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 22154
+
+[services.development]
+run = "pnpm --filter @workspace/investment-dashboard run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/investment-dashboard", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/investment-dashboard/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "22154"
+BASE_PATH = "/"
