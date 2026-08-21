@@ -7,6 +7,7 @@ import {
   ChevronRight,
   CircleHelp,
   Coins,
+  Copy,
   Flame,
   Gauge,
   Gift,
@@ -20,6 +21,7 @@ import {
   ShieldCheck,
   Sparkles,
   Star,
+  Send,
   Target,
   UserRound,
   WalletCards,
@@ -76,6 +78,8 @@ function App() {
   const [withdrawOpen, setWithdrawOpen] = useState(false);
   const [withdrawAmount, setWithdrawAmount] = useState('');
   const [walletAddress, setWalletAddress] = useState('');
+  const [depositPlan, setDepositPlan] = useState<(typeof plans)[number] | null>(null);
+  const [depositSuccess, setDepositSuccess] = useState(false);
 
   const level = Math.floor(score / 5000) + 1;
   const levelFloor = (level - 1) * 5000;
@@ -111,9 +115,12 @@ function App() {
   };
 
   const activatePlan = (id: string) => {
-    setActivePlan(id);
     const chosen = plans.find((plan) => plan.id === id);
-    if (chosen) showNotice(`${currency(chosen.amount)} plan staged`, 'Simulation only. No funds were moved.');
+    if (chosen) {
+      setActivePlan(id);
+      setDepositPlan(chosen);
+      setDepositSuccess(false);
+    }
   };
 
   const spin = () => {
@@ -241,6 +248,7 @@ function App() {
       </div>
       {notice && <div className="toast-note"><p className="font-bold">{notice.title}</p>{notice.detail && <p className="mt-1 text-white/55">{notice.detail}</p>}</div>}
       {withdrawOpen && <WithdrawModal amount={withdrawAmount} address={walletAddress} setAmount={setWithdrawAmount} setAddress={setWalletAddress} onClose={() => setWithdrawOpen(false)} onSubmit={submitWithdraw} />}
+      {depositPlan && <DepositModal plan={depositPlan} success={depositSuccess} onGetIt={() => { setDepositSuccess(true); showNotice('Deposit request marked successful', 'Simulation only. No funds were moved.'); }} onClose={() => { setDepositPlan(null); setDepositSuccess(false); }} />}
     </div>
   );
 }
@@ -324,6 +332,36 @@ function PlansPage({ activePlan, onActivate }: { activePlan: string | null; onAc
 
 function PlanCard({ plan, active, onActivate }: { plan: typeof plans[number]; active: boolean; onActivate: () => void }) {
   return <div className={`plan-card card-surface ${plan.id === 'moonshot' ? 'featured' : ''}`}><div className="flex items-center justify-between"><span className="eyebrow">{plan.tag}</span><span className="sim-chip">30 days</span></div><p className="mt-6 text-xs font-bold opacity-65">Simulate</p><p className="plan-amount mt-1">${plan.amount}</p><div className="my-5 flex items-center gap-2"><ArrowRight size={14} className="opacity-45" /><div><p className="text-xs font-bold">Scenario result</p><p className="text-xl font-bold text-[hsl(var(--accent))]">${plan.simulated}</p></div></div><p className="muted min-h-10 text-xs leading-5">{plan.description}</p><button className={active ? 'btn-quiet mt-5 w-full' : 'btn-primary mt-5 w-full'} onClick={onActivate} data-testid={`button-plan-${plan.id}`}>{active ? <><Check size={14} /> Staged</> : <>Stage scenario <ArrowRight size={14} /></>}</button></div>;
+}
+
+function DepositModal({ plan, success, onGetIt, onClose }: { plan: typeof plans[number]; success: boolean; onGetIt: () => void; onClose: () => void }) {
+  const depositAddress = 'TX9yDemoInvestlyWallet7GATEIT';
+  return (
+    <div className="modal-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}>
+      <div className="modal-card" role="dialog" aria-modal="true" aria-labelledby="deposit-title">
+        <div className="flex items-start justify-between">
+          <div>
+            <p className="eyebrow">Deposit simulation</p>
+            <h2 id="deposit-title" className="section-title mt-2">${plan.amount} {plan.tag} plan</h2>
+          </div>
+          <button className="rounded-lg p-2 text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--muted))]" onClick={onClose} aria-label="Close deposit modal" data-testid="button-close-deposit"><X size={17} /></button>
+        </div>
+        <p className="muted mt-4 text-xs leading-5">Send the demo amount to the address below, then press “Gate it” to complete this simulated deposit flow.</p>
+        <div className="mt-6 rounded-xl border border-[hsl(var(--border))] bg-[hsl(var(--muted))] p-4">
+          <p className="eyebrow">TRC20 deposit address</p>
+          <div className="mt-3 flex items-center gap-2">
+            <code className="min-w-0 flex-1 break-all text-xs font-bold leading-5">{depositAddress}</code>
+            <button className="rounded-lg p-2 text-[hsl(var(--primary))] hover:bg-white/60" onClick={() => navigator.clipboard?.writeText(depositAddress)} aria-label="Copy deposit address" data-testid="button-copy-deposit"><Copy size={15} /></button>
+          </div>
+        </div>
+        {success && <div className="mt-4 flex items-center gap-2 rounded-xl border border-[rgba(38,145,137,.25)] bg-[rgba(38,145,137,.1)] p-3 text-xs font-bold text-[hsl(var(--primary))]" role="status"><Check size={15} /> success</div>}
+        <div className="mt-6 flex flex-wrap justify-end gap-2">
+          <a className="btn-quiet" href="https://t.me/investly_support" target="_blank" rel="noreferrer" data-testid="link-support-admin"><Send size={14} /> Support Admin</a>
+          <button className="btn-primary" onClick={onGetIt} disabled={success} data-testid="button-gate-it">{success ? <><Check size={14} /> success</> : <>Gate it <ArrowRight size={14} /></>}</button>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 function BonusPage({ available, spinning, rotation, result, onSpin }: { available: boolean; spinning: boolean; rotation: number; result: string | null; onSpin: () => void }) {
