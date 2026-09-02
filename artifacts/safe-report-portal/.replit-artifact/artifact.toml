@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/safe-report-portal/"
+title = "Safe Report Portal"
+description = "A simulated public-safety complaint portal where people can submit relationship-related harassment or fraud reports, attach details, track case status, and review an officer action workspace."
+version = "1.0.0"
+id = "artifacts/safe-report-portal"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/safe-report-portal/" ]
+localPort = 20215
+
+[services.development]
+run = "pnpm --filter @workspace/safe-report-portal run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/safe-report-portal", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/safe-report-portal/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "20215"
+BASE_PATH = "/safe-report-portal/"
