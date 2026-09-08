@@ -44,7 +44,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path:artifacts/safe-report-portal/dist/public
+          path: artifacts/safe-report-portal/dist/public
 
   deploy:
     environment:
