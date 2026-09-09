@@ -204,8 +204,36 @@ function Step({ number, title, body }: { number: string; title: string; body: st
 function ReportFlow({ onCancel, onComplete }: { onCancel: () => void; onComplete: (report: Report) => void }) {
   const { t } = useLanguage();
   const [step, setStep] = useState(1); const [type, setType] = useState(''); const [date, setDate] = useState(''); const [location, setLocation] = useState(''); const [summary, setSummary] = useState(''); const [evidence, setEvidence] = useState(''); const [consent, setConsent] = useState(false); const [submitted, setSubmitted] = useState(false); const [trackingId, setTrackingId] = useState('');
-  const typeName = type ? t(reportTypes.find((item) => item.id === type)?.title ?? 'typeOther') : ''; const canContinue = step === 1 ? !!type : step === 2 ? !!date && !!summary : consent;
-  const submit = () => { const id = `NRB-${new Date().getFullYear().toString().slice(-2)}-${Math.floor(1000 + Math.random() * 8999)}`; setTrackingId(id); setSubmitted(true); };
+  const typeName = type ? t(reportTypes.find((item) => item.id === type)?.title ?? 'typeOther') : ''; const canContinue = step === 1 ? !!type : step === 2 ? !!date && !!summary : consent;   const submit = async () => {
+  try {
+    const id = `NRB-${new Date().getFullYear().toString().slice(-2)}-${Math.floor(1000 + Math.random() * 8999)}`;
+
+    const response = await fetch("/api/reports", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id,
+        typeId: type,
+        date: date || null,
+        location: location || null,
+        summary,
+        evidence: evidence || null,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Report submission failed");
+    }
+
+    setTrackingId(id);
+    setSubmitted(true);
+  } catch (error) {
+    console.error("Report submission error:", error);
+    alert("রিপোর্ট জমা দেওয়া যায়নি। আবার চেষ্টা করুন।");
+  }
+};  
   if (submitted) return <main className="mx-auto max-w-3xl px-5 py-12 md:px-8 md:py-20"><div className="surface fade-up rounded-3xl p-6 text-center md:p-12"><span className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-secondary text-[hsl(var(--chart-2))]"><BadgeCheck size={34} /></span><p className="eyebrow mt-7">{t('receivedSession')}</p><h1 className="display mt-3 text-5xl">{t('madeRecord')}</h1><p className="mx-auto mt-4 max-w-md text-sm leading-6 text-muted-foreground">{t('trackingBody')}</p><p className="mx-auto mt-5 inline-flex items-center gap-2 rounded-full bg-[hsl(var(--chart-2)/.1)] px-3 py-2 text-xs font-semibold text-[hsl(var(--chart-2))]"><Check size={14} /> {t('receivedAction')}</p><div className="mx-auto mt-7 max-w-sm rounded-xl bg-primary p-5 text-primary-foreground"><p className="eyebrow text-primary-foreground/60">{t('trackingId')}</p><p className="mono mt-2 text-2xl tracking-wider">{trackingId}</p></div><div className="confirmation-panel mx-auto mt-7 max-w-xl rounded-2xl p-5 md:p-6"><div className="flex items-start gap-3 text-left"><span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-accent text-accent-foreground"><Clock3 size={17} /></span><div><p className="eyebrow">{t('whatHappensNext')}</p><p className="mt-1 text-sm leading-6 text-muted-foreground">{t('submittedNext')}</p></div></div><div className="mt-5">{[[t('nextAfterSubmit1'), t('nextAfterSubmit1Body')], [t('nextAfterSubmit2'), t('nextAfterSubmit2Body')], [t('nextAfterSubmit3'), t('nextAfterSubmit3Body')]].map(([title, body], index) => <div className="confirmation-step" key={title}><span className="confirmation-index">0{index + 1}</span><div className="text-left"><p className="text-sm font-bold">{title}</p><p className="mt-1 text-xs leading-5 text-muted-foreground">{body}</p></div></div>)}</div></div><div className="mt-8 flex flex-wrap justify-center gap-3"><button className="btn-primary" onClick={() => onComplete({ id: trackingId, typeId: type, date: date || t('notProvided'), location: location || t('notProvided'), summary, evidence, status: 'Received', priority: 'Standard', actionNote: t('receivedAction'), nextStep: t('submittedNext') })} data-testid="button-view-submitted-report">{t('viewReport')} <ArrowRight size={15} /></button><button className="btn-quiet" onClick={onCancel} data-testid="button-finish-report">{t('returnHome')}</button></div></div></main>;
   return <main className="mx-auto max-w-5xl px-5 py-9 md:px-8 md:py-14"><div className="mb-8 flex items-start justify-between gap-4"><div><button className="btn-quiet -ml-3 mb-4 px-3" onClick={onCancel} data-testid="button-cancel-report"><ArrowLeft size={15} /> {t('back')}</button><p className="eyebrow">{t('privateIntake')}</p><h1 className="display mt-2 text-4xl md:text-5xl">{t('onePart')}</h1></div><span className="mono mt-1 text-xs text-muted-foreground">{t('step')} {step} / 3</span></div><div className="mb-9 flex gap-2">{[1, 2, 3].map((item) => <div key={item} className={`h-1 flex-1 rounded-full ${item <= step ? 'bg-primary' : 'bg-border'}`} />)}</div>
     {step === 1 && <section className="fade-up"><div className="mb-5"><h2 className="text-xl font-bold">{t('chooseExperience')}</h2><p className="mt-1 text-sm text-muted-foreground">{t('chooseExperienceBody')}</p></div><div className="grid gap-3 sm:grid-cols-2">{reportTypes.map(({ id, title, body, icon: Icon }) => <button key={id} className={`choice ${type === id ? 'selected' : ''}`} onClick={() => setType(id)} aria-pressed={type === id} data-testid={`choice-report-type-${id}`}><span className="flex items-start gap-3"><span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-muted text-primary"><Icon size={19} /></span><span><span className="block font-bold">{t(title)}</span><span className="mt-1 block text-xs leading-5 text-muted-foreground">{t(body)}</span></span>{type === id && <Check size={16} className="ml-auto text-primary" />}</span></button>)}</div></section>}
