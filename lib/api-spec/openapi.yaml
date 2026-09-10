@@ -10,6 +10,8 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: reports
+    description: Safe report intake operations
 paths:
   /healthz:
     get:
@@ -24,6 +26,37 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /reports:
+    post:
+      operationId: createReport
+      tags: [reports]
+      summary: Save a safe report
+      description: Stores a report submitted through the local safety portal.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReportInput"
+      responses:
+        "201":
+          description: Report saved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Report"
+        "400":
+          description: Invalid report
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Report could not be saved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 components:
   schemas:
     HealthStatus:
@@ -33,4 +66,79 @@ components:
           type: string
       required:
         - status
+    ReportInput:
+      type: object
+      properties:
+        typeId:
+          type: string
+          enum: [harassment, threats, blackmail, fraud, stalking, something-else]
+        incidentDate:
+          type: string
+          format: date
+        location:
+          type: string
+        summary:
+          type: string
+          minLength: 1
+        evidence:
+          type: string
+        language:
+          type: string
+          enum: [en, bn]
+        consent:
+          type: boolean
+      required:
+        - typeId
+        - incidentDate
+        - summary
+        - language
+        - consent
+    Report:
+      type: object
+      properties:
+        id:
+          type: string
+        typeId:
+          type: string
+        date:
+          type: string
+          format: date
+        location:
+          type: string
+        summary:
+          type: string
+        evidence:
+          type: string
+        language:
+          type: string
+          enum: [en, bn]
+        status:
+          type: string
+          enum: [Received, Reviewing, Action planned, Closed]
+        priority:
+          type: string
+          enum: [Standard, Urgent]
+        actionNote:
+          type: string
+        nextStep:
+          type: string
+      required:
+        - id
+        - typeId
+        - date
+        - location
+        - summary
+        - evidence
+        - language
+        - status
+        - priority
+        - actionNote
+        - nextStep
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+        - error
 

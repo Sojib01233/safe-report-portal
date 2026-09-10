@@ -1,0 +1,1 @@
+- [Development schema push conflicts](database-schema-push.md) — inspect unmanaged tables before forcing Drizzle changes in the shared development database.

@@ -1,4 +1,4 @@
-modules = ["nodejs-24"]
+modules = ["nodejs-24", "postgresql-16"]
 
 [deployment]
 router = "application"
@@ -41,3 +41,4 @@ externalPort = 3001
 
 [nix]
 packages = ["python39Packages.softlayer"]
+channel = "stable-25_05"
