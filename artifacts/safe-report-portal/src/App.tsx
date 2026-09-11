@@ -13,7 +13,7 @@ type Report = {
 
 const copy = {
   en: {
-    tagline: 'a safer first step', overview: 'Overview', makeReport: 'Make a report', myReports: 'My reports', helpResources: 'Help & resources',
+    tagline: 'a safer first step', overview: 'Overview', homeSection: 'Home', makeReport: 'Make a report', reportSection: 'Report', myReports: 'My reports', helpResources: 'Help & resources',
     privateSession: 'Current session', officerView: 'Demo officer view', toggleNav: 'Toggle navigation', footer: 'Nirbhoy · All rights reserved 2026 · Safer documentation portal', sessionOnly: 'Saved report shown in this session',
     homeAria: 'Nirbhoy home', storyPace: 'Your story, your pace', heroTitle: 'A safer first step when things don’t feel safe.',
     heroBody: 'Nirbhoy helps you document breakup-related harassment, threats, blackmail, fraud, or stalking — then find a clear next action without pretending to be a police station.',
@@ -64,7 +64,7 @@ const copy = {
     language: 'Language', english: 'English', bangla: 'বাংলা',
   },
   bn: {
-    tagline: 'নিরাপদভাবে শুরু করার একটি ধাপ', overview: 'সংক্ষিপ্তসার', makeReport: 'অভিযোগ জানান', myReports: 'আমার রিপোর্ট', helpResources: 'সহায়তা ও রিসোর্স',
+    tagline: 'নিরাপদভাবে শুরু করার একটি ধাপ', overview: 'সংক্ষিপ্তসার', homeSection: 'হোম', makeReport: 'অভিযোগ জানান', reportSection: 'রিপোর্ট করুন', myReports: 'আমার রিপোর্ট', helpResources: 'সহায়তা ও রিসোর্স',
     privateSession: 'বর্তমান সেশন', officerView: 'ডেমো অফিসার ভিউ', toggleNav: 'নেভিগেশন খুলুন', footer: '© ২০২৬ নির্ভয় · সর্বস্বত্ব সংরক্ষিত · নিরাপদ রিপোর্ট পোর্টাল', sessionOnly: 'এই সেশনে রিপোর্টটি দেখা যাচ্ছে',
     homeAria: 'নির্ভয় হোম', storyPace: 'আপনার কথা, আপনার সময়', heroTitle: 'কিছু নিরাপদ মনে না হলে নিরাপদভাবে শুরু করার একটি ধাপ।',
     heroBody: 'নির্ভয় সম্পর্ক-পরবর্তী হয়রানি, হুমকি, ব্ল্যাকমেইল, প্রতারণা বা অনুসরণ করার ঘটনা লিখে রাখতে এবং পুলিশ স্টেশন সেজে না থেকে পরবর্তী পদক্ষেপ ঠিক করতে সাহায্য করে।',
@@ -159,20 +159,19 @@ function Portal() {
   const navigate = (next: View) => { setView(next); setMobileNav(false); window.scrollTo({ top: 0, behavior: 'smooth' }); };
   const updateReport = (id: string, patch: Partial<Report>) => setReports((current) => current.map((report) => report.id === id ? { ...report, ...patch } : report));
   const navItems = [
-    [ 'home', t('overview'), Home, 'nav-overview' ],
-    [ 'report', t('makeReport'), Plus, 'nav-make-report' ],
-    [ 'reports', t('myReports'), ClipboardList, 'nav-my-reports' ],
-    [ 'help', t('helpResources'), LifeBuoy, 'nav-help' ],
+    { id: 'home' as View, label: t('homeSection'), icon: Home, testId: 'nav-home', count: undefined },
+    { id: 'reports' as View, label: t('myReports'), icon: ClipboardList, testId: 'nav-my-reports', count: reports.length },
+    { id: 'report' as View, label: t('reportSection'), icon: Plus, testId: 'nav-report', count: undefined },
   ] as const;
   return <div className="app-shell">
     <header className="topbar sticky top-0 z-30">
       <div className="mx-auto flex max-w-[1440px] items-center justify-between px-5 py-3 md:px-8">
         <button className="flex items-center gap-3" onClick={() => navigate('home')} data-testid="button-brand-home" aria-label={t('homeAria')}><span className="brand-mark"><ShieldCheck size={21} strokeWidth={2.4} /></span><span className="text-left"><span className="block text-lg font-bold leading-none tracking-tight">nirbhoy</span><span className="mono mt-1 block text-[9px] uppercase tracking-[.18em] text-muted-foreground">{t('tagline')}</span></span></button>
-        <div className="hidden items-center gap-1 md:flex">{navItems.map(([id, label, icon, testId]) => <NavButton key={id} active={view === id} label={label} icon={icon} onClick={() => navigate(id)} testId={testId} />)}</div>
+        <div className="section-nav hidden items-center gap-1 md:flex">{navItems.map(({ id, label, icon, testId, count }) => <NavButton key={id} active={view === id} label={label} icon={icon} count={count} onClick={() => navigate(id)} testId={testId} />)}</div>
         <div className="hidden items-center gap-3 md:flex"><LanguageSwitch /><span className="flex items-center gap-2 text-xs text-muted-foreground"><span className="status-dot" /> {t('privateSession')}</span><button className="btn-quiet border border-border" onClick={() => navigate('officer')} data-testid="button-officer-workspace"><UsersRound size={15} /> {t('officerView')}</button></div>
         <button className="btn-quiet md:hidden" onClick={() => setMobileNav(!mobileNav)} aria-label={t('toggleNav')} data-testid="button-mobile-menu"><Menu size={21} /></button>
       </div>
-      {mobileNav && <div className="border-t border-border bg-background px-5 py-3 md:hidden"><div className="mb-3 flex items-center justify-between"><span className="eyebrow">{t('language')}</span><LanguageSwitch /></div><div className="grid gap-1">{navItems.map(([id, label, icon, testId]) => <NavButton key={id} active={view === id} label={label} icon={icon} onClick={() => navigate(id)} testId={`mobile-${testId}`} />)}<NavButton active={view === 'officer'} label={t('officerView')} icon={UsersRound} onClick={() => navigate('officer')} testId="mobile-nav-officer" /></div></div>}
+      {mobileNav && <div className="border-t border-border bg-background px-5 py-3 md:hidden"><div className="mb-3 flex items-center justify-between"><span className="eyebrow">{t('language')}</span><LanguageSwitch /></div><div className="grid gap-1">{navItems.map(({ id, label, icon, testId, count }) => <NavButton key={id} active={view === id} label={label} icon={icon} count={count} onClick={() => navigate(id)} testId={`mobile-${testId}`} />)}<NavButton active={view === 'officer'} label={t('officerView')} icon={UsersRound} onClick={() => navigate('officer')} testId="mobile-nav-officer" /></div></div>}
     </header>
     {view === 'home' && <HomeView onNavigate={navigate} reports={reports} />}
     {view === 'report' && <ReportFlow onCancel={() => navigate('home')} onComplete={(report) => { setReports((current) => [report, ...current]); setActiveReportId(report.id); setView('reports'); }} />}
@@ -188,7 +187,7 @@ function LanguageSwitch() {
   return <div className="flex items-center gap-1 rounded-lg border border-border bg-card p-1" aria-label={t('language')}><button className={`rounded-md px-2 py-1 text-[11px] font-bold ${language === 'bn' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground'}`} onClick={() => setLanguage('bn')} aria-pressed={language === 'bn'} data-testid="button-language-bn">বাংলা</button><button className={`rounded-md px-2 py-1 text-[11px] font-bold ${language === 'en' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground'}`} onClick={() => setLanguage('en')} aria-pressed={language === 'en'} data-testid="button-language-en">EN</button></div>;
 }
 
-function NavButton({ active, label, icon: Icon, onClick, testId }: { active: boolean; label: string; icon: typeof Home; onClick: () => void; testId: string }) { return <button className={`nav-pill ${active ? 'active' : ''}`} onClick={onClick} data-testid={`button-${testId}`}><Icon size={16} /> {label}</button>; }
+function NavButton({ active, label, icon: Icon, count, onClick, testId }: { active: boolean; label: string; icon: typeof Home; count?: number; onClick: () => void; testId: string }) { return <button className={`nav-pill ${active ? 'active' : ''}`} onClick={onClick} data-testid={`button-${testId}`}><Icon size={16} /><span>{label}</span>{typeof count === 'number' && <span className="nav-count">{count}</span>}</button>; }
 
 function EmergencyCallout({ compact = false }: { compact?: boolean }) {
   const { t } = useLanguage();

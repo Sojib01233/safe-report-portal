@@ -418,9 +418,12 @@
   .choice { border: 1px solid hsl(var(--border)); border-radius: 14px; background: hsl(var(--card)); padding: 1rem; text-align: left; cursor: pointer; transition: transform .2s ease, border-color .2s ease, background-color .2s ease, box-shadow .2s ease; }
   .choice:hover { transform: translateY(-2px); border-color: hsl(var(--primary) / .55); }
   .choice.selected { border-color: hsl(var(--primary)); background: hsl(var(--secondary)); box-shadow: inset 4px 0 hsl(var(--accent)), 0 8px 20px hsl(183 35% 17% / .06); }
-  .nav-pill { display: flex; align-items: center; gap: .7rem; padding: .65rem .8rem; border-radius: 9px; color: hsl(var(--sidebar-foreground) / .68); font-size: .86rem; cursor: pointer; transition: background-color .2s ease, color .2s ease; }
-  .nav-pill:hover, .nav-pill.active { color: hsl(var(--sidebar-foreground)); background: hsl(var(--sidebar-accent)); }
-  .nav-pill.active { box-shadow: inset 3px 0 hsl(var(--sidebar-primary)); }
+  .section-nav { padding: .28rem; border: 1px solid hsl(var(--border)); border-radius: 15px; background: hsl(var(--card) / .72); box-shadow: 0 8px 24px hsl(183 35% 17% / .05); }
+  .nav-pill { display: flex; min-height: 40px; align-items: center; gap: .55rem; border: 1px solid transparent; border-radius: 11px; padding: .55rem .78rem; color: hsl(var(--muted-foreground)); font-size: .82rem; font-weight: 700; cursor: pointer; transition: transform .2s ease, background-color .2s ease, color .2s ease, box-shadow .2s ease; }
+  .nav-pill:hover { color: hsl(var(--foreground)); background: hsl(var(--secondary) / .58); transform: translateY(-1px); }
+  .nav-pill.active { color: hsl(var(--primary-foreground)); background: hsl(var(--primary)); box-shadow: 3px 3px 0 hsl(var(--accent)); }
+  .nav-count { display: grid; min-width: 21px; height: 21px; place-items: center; border-radius: 999px; padding: 0 .35rem; background: hsl(var(--accent)); color: hsl(var(--accent-foreground)); font-family: var(--app-font-mono); font-size: .65rem; line-height: 1; }
+  .nav-pill.active .nav-count { background: hsl(var(--primary-foreground)); color: hsl(var(--primary)); }
   .status-dot { width: 9px; height: 9px; border-radius: 50%; background: hsl(var(--accent)); box-shadow: 0 0 0 4px hsl(var(--accent) / .18); }
   .confirmation-step { display: flex; gap: .85rem; border-top: 1px solid hsl(var(--border)); padding: .85rem 0; }
   .confirmation-step:first-child { border-top: 0; padding-top: 0; }
