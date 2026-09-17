@@ -71,7 +71,7 @@ components:
       properties:
         typeId:
           type: string
-          enum: [harassment, threats, blackmail, fraud, stalking, something-else]
+          enum: [harassment, threats, blackmail, drugs, fraud, stalking, something-else]
         incidentDate:
           type: string
           format: date
