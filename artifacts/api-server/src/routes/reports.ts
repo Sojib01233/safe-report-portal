@@ -44,6 +44,8 @@ router.post("/reports", async (req, res): Promise<void> => {
   const copy = localizedNextSteps[parsed.data.language];
   const trackingId = createTrackingId();
   const incidentDate = formatDateOnly(parsed.data.incidentDate);
+  const location = [parsed.data.division, parsed.data.district, parsed.data.policeStation, parsed.data.village].join(" / ");
+  const identityHidden = parsed.data.typeId === "drugs" && parsed.data.hideIdentity === true;
 
   try {
     const [savedReport] = await db
@@ -53,7 +55,12 @@ router.post("/reports", async (req, res): Promise<void> => {
         trackingId,
         typeId: parsed.data.typeId,
         incidentDate,
-        location: parsed.data.location ?? "",
+        division: parsed.data.division,
+        district: parsed.data.district,
+        policeStation: parsed.data.policeStation,
+        village: parsed.data.village,
+        location,
+        identityHidden,
         summary: parsed.data.summary,
         evidence: parsed.data.evidence ?? "",
         language: parsed.data.language,
@@ -70,6 +77,11 @@ router.post("/reports", async (req, res): Promise<void> => {
       typeId: savedReport.typeId,
       date: savedReport.incidentDate,
       location: savedReport.location,
+      division: savedReport.division,
+      district: savedReport.district,
+      policeStation: savedReport.policeStation,
+      village: savedReport.village,
+      identityHidden: savedReport.identityHidden,
       summary: savedReport.summary,
       evidence: savedReport.evidence,
       language: savedReport.language,

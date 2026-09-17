@@ -1,5 +1,5 @@
 import { createInsertSchema } from "drizzle-zod";
-import { date, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { boolean, date, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { z } from "zod/v4";
 
 export const safeReportsTable = pgTable("safe_reports", {
@@ -7,7 +7,12 @@ export const safeReportsTable = pgTable("safe_reports", {
   trackingId: text("tracking_id").notNull().unique(),
   typeId: text("type_id").notNull(),
   incidentDate: date("incident_date", { mode: "string" }).notNull(),
+  division: text("division").notNull().default(""),
+  district: text("district").notNull().default(""),
+  policeStation: text("police_station").notNull().default(""),
+  village: text("village").notNull().default(""),
   location: text("location").notNull().default(""),
+  identityHidden: boolean("identity_hidden").notNull().default(false),
   summary: text("summary").notNull(),
   evidence: text("evidence").notNull().default(""),
   language: text("language").notNull().default("en"),

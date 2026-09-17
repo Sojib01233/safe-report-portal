@@ -1,2 +1,3 @@
 - [Development schema push conflicts](database-schema-push.md) — inspect unmanaged tables before forcing Drizzle changes in the shared development database.
 - [Generated client DOM iterable support](generated-client-dom-iterable.md) — generated Headers normalization requires `dom.iterable` in the client TypeScript libs.
+- [Bangladesh location capture](bangladesh-location-capture.md) — use division/district selectors and free-text police station plus village/area fields.

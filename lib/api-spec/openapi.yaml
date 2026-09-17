@@ -75,8 +75,23 @@ components:
         incidentDate:
           type: string
           format: date
+        division:
+          type: string
+          minLength: 1
+        district:
+          type: string
+          minLength: 1
+        policeStation:
+          type: string
+          minLength: 1
+        village:
+          type: string
+          minLength: 1
         location:
           type: string
+        hideIdentity:
+          type: boolean
+          default: false
         summary:
           type: string
           minLength: 1
@@ -90,6 +105,10 @@ components:
       required:
         - typeId
         - incidentDate
+        - division
+        - district
+        - policeStation
+        - village
         - summary
         - language
         - consent
@@ -105,6 +124,16 @@ components:
           format: date
         location:
           type: string
+        division:
+          type: string
+        district:
+          type: string
+        policeStation:
+          type: string
+        village:
+          type: string
+        identityHidden:
+          type: boolean
         summary:
           type: string
         evidence:
@@ -127,6 +156,11 @@ components:
         - typeId
         - date
         - location
+        - division
+        - district
+        - policeStation
+        - village
+        - identityHidden
         - summary
         - evidence
         - language
