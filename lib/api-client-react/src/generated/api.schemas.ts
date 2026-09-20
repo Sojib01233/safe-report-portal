@@ -99,3 +99,16 @@ export interface ErrorResponse {
   error: string;
 }
 
+export interface PresenceInput {
+  /**
+     * @minLength 1
+     * @maxLength 128
+     */
+  clientId: string;
+}
+
+export interface Presence {
+  /** @minimum 0 */
+  count: number;
+}
+

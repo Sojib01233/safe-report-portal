@@ -12,6 +12,8 @@ tags:
     description: Health operations
   - name: reports
     description: Safe report intake operations
+  - name: presence
+    description: Anonymous live visitor presence
 paths:
   /healthz:
     get:
@@ -53,6 +55,41 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
         "500":
           description: Report could not be saved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /presence:
+    get:
+      operationId: getPresence
+      tags: [presence]
+      summary: Get live visitor count
+      responses:
+        "200":
+          description: Current anonymous live visitor count
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Presence"
+    post:
+      operationId: updatePresence
+      tags: [presence]
+      summary: Register an anonymous live visitor heartbeat
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PresenceInput"
+      responses:
+        "200":
+          description: Updated anonymous live visitor count
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Presence"
+        "400":
+          description: Invalid presence heartbeat
           content:
             application/json:
               schema:
@@ -175,4 +212,21 @@ components:
           type: string
       required:
         - error
+    PresenceInput:
+      type: object
+      properties:
+        clientId:
+          type: string
+          minLength: 1
+          maxLength: 128
+      required:
+        - clientId
+    Presence:
+      type: object
+      properties:
+        count:
+          type: number
+          minimum: 0
+      required:
+        - count
 

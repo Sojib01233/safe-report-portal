@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { AlertTriangle, ArrowLeft, ArrowRight, BadgeCheck, Check, ChevronRight, ClipboardList, Clock3, EyeOff, FileText, Flag, Headphones, Home, Info, KeyRound, LifeBuoy, LockKeyhole, Menu, MessageSquareText, MoreHorizontal, NotebookPen, PhoneCall, Plus, Search, Send, ShieldCheck, Sparkles, UsersRound } from 'lucide-react';
-import { createReport } from '@workspace/api-client-react';
+import { createReport, getPresence, updatePresence } from '@workspace/api-client-react';
 import { bangladeshLocations } from './bangladesh-locations';
 
 type View = 'home' | 'report' | 'reports' | 'help' | 'officer';
@@ -15,7 +15,7 @@ type Report = {
 const copy = {
   en: {
     tagline: 'a safer first step', overview: 'Overview', homeSection: 'Home', makeReport: 'Make a report', reportSection: 'Report', myReports: 'My reports', helpResources: 'Help & resources',
-    privateSession: 'Current session', officerView: 'Demo officer view', toggleNav: 'Toggle navigation', footer: 'Nirbhoy · All rights reserved 2026 · Safer documentation portal', sessionOnly: 'Saved report shown in this session',
+    privateSession: 'Current session', liveNow: 'live now', officerView: 'Demo officer view', toggleNav: 'Toggle navigation', footer: 'Nirbhoy · All rights reserved 2026 · Safer documentation portal', sessionOnly: 'Saved report shown in this session',
     homeAria: 'Nirbhoy home', storyPace: 'Your story, your pace', heroTitle: 'A safer first step when things don’t feel safe.',
     heroBody: 'Nirbhoy helps you document breakup-related harassment, threats, blackmail, fraud, or stalking — then find a clear next action without pretending to be a police station.',
     startReport: 'Start a report', needHelp: 'I need help right now', noAccount: 'No account. No upload required. Your submitted report is saved securely.',
@@ -67,7 +67,7 @@ const copy = {
   },
   bn: {
     tagline: 'নিরাপদভাবে শুরু করার একটি ধাপ', overview: 'সংক্ষিপ্তসার', homeSection: 'হোম', makeReport: 'অভিযোগ জানান', reportSection: 'রিপোর্ট করুন', myReports: 'আমার রিপোর্ট', helpResources: 'সহায়তা ও রিসোর্স',
-    privateSession: 'বর্তমান সেশন', officerView: 'ডেমো অফিসার ভিউ', toggleNav: 'নেভিগেশন খুলুন', footer: '© ২০২৬ নির্ভয় · সর্বস্বত্ব সংরক্ষিত · নিরাপদ রিপোর্ট পোর্টাল', sessionOnly: 'এই সেশনে রিপোর্টটি দেখা যাচ্ছে',
+    privateSession: 'বর্তমান সেশন', liveNow: 'জন এখন লাইভ', officerView: 'ডেমো অফিসার ভিউ', toggleNav: 'নেভিগেশন খুলুন', footer: '© ২০২৬ নির্ভয় · সর্বস্বত্ব সংরক্ষিত · নিরাপদ রিপোর্ট পোর্টাল', sessionOnly: 'এই সেশনে রিপোর্টটি দেখা যাচ্ছে',
     homeAria: 'নির্ভয় হোম', storyPace: 'আপনার কথা, আপনার সময়', heroTitle: 'কিছু নিরাপদ মনে না হলে নিরাপদভাবে শুরু করার একটি ধাপ।',
     heroBody: 'নির্ভয় সম্পর্ক-পরবর্তী হয়রানি, হুমকি, ব্ল্যাকমেইল, প্রতারণা বা অনুসরণ করার ঘটনা লিখে রাখতে এবং পুলিশ স্টেশন সেজে না থেকে পরবর্তী পদক্ষেপ ঠিক করতে সাহায্য করে।',
     startReport: 'রিপোর্ট শুরু করুন', needHelp: 'এই মুহূর্তে সাহায্য দরকার', noAccount: 'অ্যাকাউন্ট লাগবে না। ফাইল আপলোড নয়। শুধু এই সেশনে সংরক্ষিত থাকবে।',
@@ -139,6 +139,20 @@ function LanguageProvider({ children }: { children: React.ReactNode }) {
 function useLanguage() { return useContext(LanguageContext); }
 function App() { return <LanguageProvider><Portal /></LanguageProvider>; }
 
+function getPresenceClientId() {
+  if (typeof window === 'undefined') return 'server-render';
+  const stored = window.sessionStorage.getItem('nirbhoy-presence-id');
+  if (stored) return stored;
+  const generated = window.crypto?.randomUUID?.() ?? `visitor-${Math.random().toString(36).slice(2)}`;
+  window.sessionStorage.setItem('nirbhoy-presence-id', generated);
+  return generated;
+}
+
+function LiveVisitorCount({ count }: { count: number | null }) {
+  const { t } = useLanguage();
+  return <span className="flex items-center gap-2 text-xs text-muted-foreground" aria-live="polite" data-testid="live-visitor-count"><span className="status-dot" /> {count ?? '—'} {t('liveNow')}</span>;
+}
+
 const reportTypes = [
   { id: 'harassment', title: 'typeHarassment', body: 'typeHarassmentBody', icon: MessageSquareText },
   { id: 'threats', title: 'typeThreats', body: 'typeThreatsBody', icon: AlertTriangle },
@@ -157,11 +171,32 @@ function Portal() {
   const { t, language, setLanguage } = useLanguage();
   const [view, setView] = useState<View>('home');
   const [reports, setReports] = useState<Report[]>(seedReports);
+  const [liveCount, setLiveCount] = useState<number | null>(null);
+  const [presenceClientId] = useState(getPresenceClientId);
   const [mobileNav, setMobileNav] = useState(false);
   const [activeReportId, setActiveReportId] = useState(seedReports[0].id);
   const activeReport = reports.find((report) => report.id === activeReportId) ?? reports[0];
   const navigate = (next: View) => { setView(next); setMobileNav(false); window.scrollTo({ top: 0, behavior: 'smooth' }); };
   const updateReport = (id: string, patch: Partial<Report>) => setReports((current) => current.map((report) => report.id === id ? { ...report, ...patch } : report));
+  useEffect(() => {
+    let mounted = true;
+    const heartbeat = async () => {
+      try {
+        const presence = await updatePresence({ clientId: presenceClientId });
+        if (mounted) setLiveCount(presence.count);
+      } catch {
+        try {
+          const presence = await getPresence();
+          if (mounted) setLiveCount(presence.count);
+        } catch {
+          if (mounted) setLiveCount(null);
+        }
+      }
+    };
+    heartbeat();
+    const interval = window.setInterval(heartbeat, 15_000);
+    return () => { mounted = false; window.clearInterval(interval); };
+  }, [presenceClientId]);
   const navItems = [
     { id: 'home' as View, label: t('homeSection'), icon: Home, testId: 'nav-home', count: undefined },
     { id: 'reports' as View, label: t('myReports'), icon: ClipboardList, testId: 'nav-my-reports', count: reports.length },
@@ -172,10 +207,10 @@ function Portal() {
       <div className="mx-auto flex max-w-[1440px] items-center justify-between px-5 py-3 md:px-8">
         <button className="flex items-center gap-3" onClick={() => navigate('home')} data-testid="button-brand-home" aria-label={t('homeAria')}><span className="brand-mark"><ShieldCheck size={21} strokeWidth={2.4} /></span><span className="text-left"><span className="block text-lg font-bold leading-none tracking-tight">nirbhoy</span><span className="mono mt-1 block text-[9px] uppercase tracking-[.18em] text-muted-foreground">{t('tagline')}</span></span></button>
         <div className="section-nav hidden items-center gap-1 md:flex">{navItems.map(({ id, label, icon, testId, count }) => <NavButton key={id} active={view === id} label={label} icon={icon} count={count} onClick={() => navigate(id)} testId={testId} />)}</div>
-        <div className="hidden items-center gap-3 md:flex"><LanguageSwitch /><span className="flex items-center gap-2 text-xs text-muted-foreground"><span className="status-dot" /> {t('privateSession')}</span><button className="btn-quiet border border-border" onClick={() => navigate('officer')} data-testid="button-officer-workspace"><UsersRound size={15} /> {t('officerView')}</button></div>
+        <div className="hidden items-center gap-3 md:flex"><LanguageSwitch /><LiveVisitorCount count={liveCount} /><span className="flex items-center gap-2 text-xs text-muted-foreground"><span className="status-dot" /> {t('privateSession')}</span><button className="btn-quiet border border-border" onClick={() => navigate('officer')} data-testid="button-officer-workspace"><UsersRound size={15} /> {t('officerView')}</button></div>
         <button className="btn-quiet md:hidden" onClick={() => setMobileNav(!mobileNav)} aria-label={t('toggleNav')} data-testid="button-mobile-menu"><Menu size={21} /></button>
       </div>
-      {mobileNav && <div className="border-t border-border bg-background px-5 py-3 md:hidden"><div className="mb-3 flex items-center justify-between"><span className="eyebrow">{t('language')}</span><LanguageSwitch /></div><div className="grid gap-1">{navItems.map(({ id, label, icon, testId, count }) => <NavButton key={id} active={view === id} label={label} icon={icon} count={count} onClick={() => navigate(id)} testId={`mobile-${testId}`} />)}<NavButton active={view === 'officer'} label={t('officerView')} icon={UsersRound} onClick={() => navigate('officer')} testId="mobile-nav-officer" /></div></div>}
+       {mobileNav && <div className="border-t border-border bg-background px-5 py-3 md:hidden"><div className="mb-3 flex items-center justify-between"><span className="eyebrow">{t('language')}</span><LanguageSwitch /></div><div className="mb-3"><LiveVisitorCount count={liveCount} /></div><div className="grid gap-1">{navItems.map(({ id, label, icon, testId, count }) => <NavButton key={id} active={view === id} label={label} icon={icon} count={count} onClick={() => navigate(id)} testId={`mobile-${testId}`} />)}<NavButton active={view === 'officer'} label={t('officerView')} icon={UsersRound} onClick={() => navigate('officer')} testId="mobile-nav-officer" /></div></div>}
     </header>
     {view === 'home' && <HomeView onNavigate={navigate} reports={reports} />}
     {view === 'report' && <ReportFlow onCancel={() => navigate('home')} onComplete={(report) => { setReports((current) => [report, ...current]); setActiveReportId(report.id); setView('reports'); }} />}

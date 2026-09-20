@@ -22,6 +22,8 @@ import type {
 import type {
   ErrorResponse,
   HealthStatus,
+  Presence,
+  PresenceInput,
   Report,
   ReportInput
 } from './api.schemas';
@@ -201,5 +203,153 @@ export const useCreateReport = <TError = ErrorType<ErrorResponse>,
         TContext
       > => {
       return useMutation(getCreateReportMutationOptions(options));
+    }
+
+export const getGetPresenceUrl = () => {
+
+
+
+
+  return `/api/presence`
+}
+
+/**
+ * @summary Get live visitor count
+ */
+export const getPresence = async ( options?: Parameters<typeof customFetch>[1]): Promise<Presence> => {
+
+  return customFetch<Presence>(getGetPresenceUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetPresenceQueryKey = () => {
+    return [
+    `/api/presence`
+    ] as const;
+    }
+
+
+export const getGetPresenceQueryOptions = <TData = Awaited<ReturnType<typeof getPresence>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getPresence>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetPresenceQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getPresence>>> = ({ signal }) => getPresence({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getPresence>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetPresenceQueryResult = NonNullable<Awaited<ReturnType<typeof getPresence>>>
+export type GetPresenceQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary Get live visitor count
+ */
+
+export function useGetPresence<TData = Awaited<ReturnType<typeof getPresence>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getPresence>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetPresenceQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+
+export const getUpdatePresenceUrl = () => {
+
+
+
+
+  return `/api/presence`
+}
+
+/**
+ * @summary Register an anonymous live visitor heartbeat
+ */
+export const updatePresence = async (presenceInput: PresenceInput, options?: Parameters<typeof customFetch>[1]): Promise<Presence> => {
+
+  return customFetch<Presence>(getUpdatePresenceUrl(),
+  {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(presenceInput)
+  }
+);}
+
+
+
+
+
+export const getUpdatePresenceMutationOptions = <TError = ErrorType<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updatePresence>>, TError,{data: BodyType<PresenceInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof updatePresence>>, TError,{data: BodyType<PresenceInput>}, TContext> => {
+
+const mutationKey = ['updatePresence'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updatePresence>>, {data: BodyType<PresenceInput>}> = (props) => {
+          const {data} = props ?? {};
+
+          return  updatePresence(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdatePresenceMutationResult = NonNullable<Awaited<ReturnType<typeof updatePresence>>>
+    export type UpdatePresenceMutationBody = BodyType<PresenceInput>
+    export type UpdatePresenceMutationError = ErrorType<ErrorResponse>
+
+    /**
+ * @summary Register an anonymous live visitor heartbeat
+ */
+export const useUpdatePresence = <TError = ErrorType<ErrorResponse>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updatePresence>>, TError,{data: BodyType<PresenceInput>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof updatePresence>>,
+        TError,
+        {data: BodyType<PresenceInput>},
+        TContext
+      > => {
+      return useMutation(getUpdatePresenceMutationOptions(options));
     }
 

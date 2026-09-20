@@ -63,3 +63,35 @@ export const CreateReportResponse = zod.object({
 })
 
 
+/**
+ * @summary Get live visitor count
+ */
+export const getPresenceResponseCountMin = 0;
+
+
+
+export const GetPresenceResponse = zod.object({
+  "count": zod.number().min(getPresenceResponseCountMin)
+})
+
+
+/**
+ * @summary Register an anonymous live visitor heartbeat
+ */
+export const updatePresenceBodyClientIdMax = 128;
+
+
+
+export const UpdatePresenceBody = zod.object({
+  "clientId": zod.string().min(1).max(updatePresenceBodyClientIdMax)
+})
+
+export const updatePresenceResponseCountMin = 0;
+
+
+
+export const UpdatePresenceResponse = zod.object({
+  "count": zod.number().min(updatePresenceResponseCountMin)
+})
+
+
