@@ -16,4 +16,6 @@ export * from './reportInputLanguage';
 export * from './reportInputTypeId';
 export * from './reportLanguage';
 export * from './reportPriority';
+export * from './reportStats';
 export * from './reportStatus';
+export * from './reportTypeCount';

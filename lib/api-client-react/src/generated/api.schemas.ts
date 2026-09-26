@@ -99,6 +99,20 @@ export interface ErrorResponse {
   error: string;
 }
 
+export interface ReportTypeCount {
+  typeId: string;
+  /** @minimum 0 */
+  count: number;
+}
+
+export interface ReportStats {
+  /** @minimum 0 */
+  totalReports: number;
+  /** @minimum 0 */
+  successfulReports: number;
+  byType: ReportTypeCount[];
+}
+
 export interface PresenceInput {
   /**
      * @minLength 1

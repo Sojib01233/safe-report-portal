@@ -64,6 +64,28 @@ export const CreateReportResponse = zod.object({
 
 
 /**
+ * Returns persisted report totals and counts grouped by report type.
+ * @summary Get report activity statistics
+ */
+export const getReportStatsResponseTotalReportsMin = 0;
+
+export const getReportStatsResponseSuccessfulReportsMin = 0;
+
+export const getReportStatsResponseByTypeItemCountMin = 0;
+
+
+
+export const GetReportStatsResponse = zod.object({
+  "totalReports": zod.number().min(getReportStatsResponseTotalReportsMin),
+  "successfulReports": zod.number().min(getReportStatsResponseSuccessfulReportsMin),
+  "byType": zod.array(zod.object({
+  "typeId": zod.string(),
+  "count": zod.number().min(getReportStatsResponseByTypeItemCountMin)
+}))
+})
+
+
+/**
  * @summary Get live visitor count
  */
 export const getPresenceResponseCountMin = 0;

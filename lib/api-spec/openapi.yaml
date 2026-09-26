@@ -59,6 +59,25 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+  /reports/stats:
+    get:
+      operationId: getReportStats
+      tags: [reports]
+      summary: Get report activity statistics
+      description: Returns persisted report totals and counts grouped by report type.
+      responses:
+        "200":
+          description: Report activity statistics
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReportStats"
+        "500":
+          description: Report statistics could not be loaded
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
   /presence:
     get:
       operationId: getPresence
@@ -212,6 +231,34 @@ components:
           type: string
       required:
         - error
+    ReportStats:
+      type: object
+      properties:
+        totalReports:
+          type: number
+          minimum: 0
+        successfulReports:
+          type: number
+          minimum: 0
+        byType:
+          type: array
+          items:
+            $ref: "#/components/schemas/ReportTypeCount"
+      required:
+        - totalReports
+        - successfulReports
+        - byType
+    ReportTypeCount:
+      type: object
+      properties:
+        typeId:
+          type: string
+        count:
+          type: number
+          minimum: 0
+      required:
+        - typeId
+        - count
     PresenceInput:
       type: object
       properties:

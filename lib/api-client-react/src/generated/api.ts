@@ -25,7 +25,8 @@ import type {
   Presence,
   PresenceInput,
   Report,
-  ReportInput
+  ReportInput,
+  ReportStats
 } from './api.schemas';
 
 import { customFetch } from '../custom-fetch';
@@ -204,6 +205,84 @@ export const useCreateReport = <TError = ErrorType<ErrorResponse>,
       > => {
       return useMutation(getCreateReportMutationOptions(options));
     }
+
+export const getGetReportStatsUrl = () => {
+
+
+
+
+  return `/api/reports/stats`
+}
+
+/**
+ * Returns persisted report totals and counts grouped by report type.
+ * @summary Get report activity statistics
+ */
+export const getReportStats = async ( options?: Parameters<typeof customFetch>[1]): Promise<ReportStats> => {
+
+  return customFetch<ReportStats>(getGetReportStatsUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getGetReportStatsQueryKey = () => {
+    return [
+    `/api/reports/stats`
+    ] as const;
+    }
+
+
+export const getGetReportStatsQueryOptions = <TData = Awaited<ReturnType<typeof getReportStats>>, TError = ErrorType<ErrorResponse>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getReportStats>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetReportStatsQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getReportStats>>> = ({ signal }) => getReportStats({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getReportStats>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type GetReportStatsQueryResult = NonNullable<Awaited<ReturnType<typeof getReportStats>>>
+export type GetReportStatsQueryError = ErrorType<ErrorResponse>
+
+
+/**
+ * @summary Get report activity statistics
+ */
+
+export function useGetReportStats<TData = Awaited<ReturnType<typeof getReportStats>>, TError = ErrorType<ErrorResponse>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof getReportStats>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getGetReportStatsQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
 
 export const getGetPresenceUrl = () => {
 

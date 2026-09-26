@@ -1,5 +1,6 @@
 import { randomInt } from "node:crypto";
 import { Router, type IRouter } from "express";
+import { count } from "drizzle-orm";
 import { db, safeReportsTable } from "@workspace/db";
 import { CreateReportBody, CreateReportResponse } from "@workspace/api-zod";
 
@@ -27,6 +28,33 @@ function formatDateOnly(value: Date): string {
     String(value.getUTCDate()).padStart(2, "0"),
   ].join("-");
 }
+
+router.get("/reports/stats", async (req, res): Promise<void> => {
+  try {
+    const [totalRows, typeRows] = await Promise.all([
+      db.select({ count: count() }).from(safeReportsTable),
+      db
+        .select({ typeId: safeReportsTable.typeId, count: count() })
+        .from(safeReportsTable)
+        .groupBy(safeReportsTable.typeId),
+    ]);
+
+    const totalReports = Number(totalRows[0]?.count ?? 0);
+    const response = {
+      totalReports,
+      successfulReports: totalReports,
+      byType: typeRows.map((row) => ({
+        typeId: row.typeId,
+        count: Number(row.count),
+      })),
+    };
+
+    res.json(response);
+  } catch (error) {
+    req.log.error({ err: error }, "Failed to load report statistics");
+    res.status(500).json({ error: "Report statistics could not be loaded." });
+  }
+});
 
 router.post("/reports", async (req, res): Promise<void> => {
   const parsed = CreateReportBody.safeParse(req.body);
