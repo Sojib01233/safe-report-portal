@@ -16,7 +16,7 @@ type ReportStatsData = Awaited<ReturnType<typeof getReportStats>>;
 const copy = {
   en: {
     tagline: 'a safer first step', overview: 'Overview', homeSection: 'Home', makeReport: 'Make a report', reportSection: 'Report', myReports: 'My reports', helpResources: 'Help & resources',
-    privateSession: 'Current session', liveNow: 'live now', reportActivity: 'Report activity', reportingNow: 'reporting now', totalSubmitted: 'total reports submitted', successfulSaved: 'successfully saved', reportsByType: 'Reports by type', demoStats: 'Demo live activity overview', demoStatsNote: 'Demo figures appear until saved report data is available.', loadingStats: 'Loading report activity…', statsUnavailable: 'Report activity is temporarily unavailable.', officerView: 'Demo officer view', toggleNav: 'Toggle navigation', footer: 'Nirbhoy · All rights reserved 2026 · Safer documentation portal', sessionOnly: 'Saved report shown in this session',
+    privateSession: 'Current session', liveNow: 'live now', reportActivity: 'Report activity', publicReporting: 'public reporting now', homeLiveByType: 'Live public reporting by type', totalSubmitted: 'total reports submitted', successfulSaved: 'successfully saved', reportsByType: 'Reports by type', loadingStats: 'Loading report activity…', statsUnavailable: 'Report activity is temporarily unavailable.', officerView: 'Demo officer view', toggleNav: 'Toggle navigation', footer: 'Nirbhoy · All rights reserved 2026 · Safer documentation portal', sessionOnly: 'Saved report shown in this session',
     homeAria: 'Nirbhoy home', storyPace: 'Your story, your pace', heroTitle: 'A safer first step when things don’t feel safe.',
     heroBody: 'Nirbhoy helps you document breakup-related harassment, threats, blackmail, fraud, or stalking — then find a clear next action without pretending to be a police station.',
     startReport: 'Start a report', needHelp: 'I need help right now', noAccount: 'No account. No upload required. Your submitted report is saved securely.',
@@ -68,7 +68,7 @@ const copy = {
   },
   bn: {
     tagline: 'নিরাপদভাবে শুরু করার একটি ধাপ', overview: 'সংক্ষিপ্তসার', homeSection: 'হোম', makeReport: 'অভিযোগ জানান', reportSection: 'রিপোর্ট করুন', myReports: 'আমার রিপোর্ট', helpResources: 'সহায়তা ও রিসোর্স',
-    privateSession: 'বর্তমান সেশন', liveNow: 'জন এখন লাইভ', reportActivity: 'রিপোর্টের সরাসরি হিসাব', reportingNow: 'এখন রিপোর্ট করছেন', totalSubmitted: 'মোট রিপোর্ট জমা হয়েছে', successfulSaved: 'সফলভাবে সংরক্ষিত হয়েছে', reportsByType: 'ধরন অনুযায়ী রিপোর্ট', demoStats: 'ডেমো লাইভ রিপোর্টের চিত্র', demoStatsNote: 'ডাটাবেসে সংরক্ষিত রিপোর্ট পাওয়া না যাওয়া পর্যন্ত ডেমো সংখ্যা দেখানো হচ্ছে।', loadingStats: 'রিপোর্টের হিসাব লোড হচ্ছে…', statsUnavailable: 'এই মুহূর্তে রিপোর্টের হিসাব পাওয়া যাচ্ছে না।', officerView: 'ডেমো অফিসার ভিউ', toggleNav: 'নেভিগেশন খুলুন', footer: '© ২০২৬ নির্ভয় · সর্বস্বত্ব সংরক্ষিত · নিরাপদ রিপোর্ট পোর্টাল', sessionOnly: 'এই সেশনে রিপোর্টটি দেখা যাচ্ছে',
+    privateSession: 'বর্তমান সেশন', liveNow: 'জন এখন লাইভ', reportActivity: 'রিপোর্টের সরাসরি হিসাব', publicReporting: 'জন এখন পাবলিক রিপোর্ট করছেন', homeLiveByType: 'ধরন অনুযায়ী লাইভ পাবলিক রিপোর্ট', totalSubmitted: 'মোট রিপোর্ট জমা হয়েছে', successfulSaved: 'সফলভাবে সংরক্ষিত হয়েছে', reportsByType: 'ধরন অনুযায়ী রিপোর্ট', loadingStats: 'রিপোর্টের হিসাব লোড হচ্ছে…', statsUnavailable: 'এই মুহূর্তে রিপোর্টের হিসাব পাওয়া যাচ্ছে না।', officerView: 'ডেমো অফিসার ভিউ', toggleNav: 'নেভিগেশন খুলুন', footer: '© ২০২৬ নির্ভয় · সর্বস্বত্ব সংরক্ষিত · নিরাপদ রিপোর্ট পোর্টাল', sessionOnly: 'এই সেশনে রিপোর্টটি দেখা যাচ্ছে',
     homeAria: 'নির্ভয় হোম', storyPace: 'আপনার কথা, আপনার সময়', heroTitle: 'কিছু নিরাপদ মনে না হলে নিরাপদভাবে শুরু করার একটি ধাপ।',
     heroBody: 'নির্ভয় সম্পর্ক-পরবর্তী হয়রানি, হুমকি, ব্ল্যাকমেইল, প্রতারণা বা অনুসরণ করার ঘটনা লিখে রাখতে এবং পুলিশ স্টেশন সেজে না থেকে পরবর্তী পদক্ষেপ ঠিক করতে সাহায্য করে।',
     startReport: 'রিপোর্ট শুরু করুন', needHelp: 'এই মুহূর্তে সাহায্য দরকার', noAccount: 'অ্যাকাউন্ট লাগবে না। ফাইল আপলোড নয়। শুধু এই সেশনে সংরক্ষিত থাকবে।',
@@ -213,7 +213,7 @@ function Portal() {
       </div>
        {mobileNav && <div className="border-t border-border bg-background px-5 py-3 md:hidden"><div className="mb-3 flex items-center justify-between"><span className="eyebrow">{t('language')}</span><LanguageSwitch /></div><div className="mb-3"><LiveVisitorCount count={liveCount} /></div><div className="grid gap-1">{navItems.map(({ id, label, icon, testId, count }) => <NavButton key={id} active={view === id} label={label} icon={icon} count={count} onClick={() => navigate(id)} testId={`mobile-${testId}`} />)}<NavButton active={view === 'officer'} label={t('officerView')} icon={UsersRound} onClick={() => navigate('officer')} testId="mobile-nav-officer" /></div></div>}
     </header>
-     {view === 'home' && <><HomeView onNavigate={navigate} reports={reports} /><HomeReportPulse /></>}
+      {view === 'home' && <><HomeView onNavigate={navigate} reports={reports} /><HomeReportPulse liveCount={liveCount} /></>}
      {view === 'report' && <ReportFlow liveCount={liveCount} onCancel={() => navigate('home')} onComplete={(report) => { setReports((current) => [report, ...current]); setActiveReportId(report.id); setView('reports'); }} />}
     {view === 'reports' && <ReportsView reports={reports} onNew={() => navigate('report')} onSelect={setActiveReportId} activeId={activeReportId} />}
     {view === 'help' && <HelpView onBack={() => navigate('home')} />}
@@ -251,7 +251,7 @@ const demoReportCounts: Record<string, number> = {
   'something-else': 4,
 };
 
-function HomeReportPulse() {
+function HomeReportPulse({ liveCount }: { liveCount: number | null }) {
   const { t } = useLanguage();
   const [stats, setStats] = useState<ReportStatsData>();
   const [usingDemo, setUsingDemo] = useState(false);
@@ -273,24 +273,22 @@ function HomeReportPulse() {
     count: stats?.byType.find((entry) => entry.typeId === item.id)?.count ?? (usingDemo ? demoReportCounts[item.id] ?? 0 : 0),
   })).sort((a, b) => b.count - a.count);
   const maxCount = Math.max(...rankedTypes.map((item) => item.count), 1);
-  return <section className="mx-auto max-w-[1440px] px-5 py-14 md:px-16 md:py-20" data-testid="home-report-pulse"><div className="soft-surface rounded-3xl p-5 md:p-8"><div className="flex flex-col justify-between gap-4 md:flex-row md:items-end"><div><p className="eyebrow">{t('reportActivity')}</p><h2 className="display mt-2 text-4xl md:text-5xl">{t('demoStats')}</h2><p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground">{usingDemo ? t('demoStatsNote') : t('yourSpaceBody')}</p></div><span className="rounded-full border border-border bg-card px-3 py-2 text-xs font-semibold text-primary">{t('reportsByType')}</span></div><div className="mt-8 grid gap-3 md:grid-cols-2">{rankedTypes.map(({ id, title, icon: Icon, count }) => <div className="surface rounded-2xl p-4" key={id} data-testid={`home-report-type-${id}`}><div className="flex items-center justify-between gap-3"><div className="flex min-w-0 items-center gap-3"><span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-muted text-primary"><Icon size={18} /></span><span className="truncate text-sm font-bold">{t(title)}</span></div><span className="mono shrink-0 text-sm text-primary">{count} {t('reportsCount')}</span></div><div className="mt-4 h-2 overflow-hidden rounded-full bg-muted"><div className="h-full rounded-full bg-primary transition-all" style={{ width: `${Math.max(8, Math.round((count / maxCount) * 100))}%` }} /></div></div>)}</div></div></section>;
+  return <section className="mx-auto max-w-[1440px] px-5 py-14 md:px-16 md:py-20" data-testid="home-report-pulse"><div className="soft-surface rounded-3xl p-5 md:p-8"><div className="flex flex-col justify-between gap-4 md:flex-row md:items-end"><div><p className="eyebrow">{t('reportActivity')}</p><h2 className="display mt-2 text-4xl md:text-5xl">{t('homeLiveByType')}</h2></div><span className="flex items-center gap-2 rounded-full border border-border bg-card px-3 py-2 text-xs font-semibold text-primary"><span className="status-dot" /> {liveCount ?? '—'} {t('publicReporting')}</span></div><div className="mt-8 grid gap-3 md:grid-cols-2">{rankedTypes.map(({ id, title, icon: Icon, count }) => <div className="surface rounded-2xl p-4" key={id} data-testid={`home-report-type-${id}`}><div className="flex items-center justify-between gap-3"><div className="flex min-w-0 items-center gap-3"><span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-muted text-primary"><Icon size={18} /></span><span className="truncate text-sm font-bold">{t(title)}</span></div><span className="mono shrink-0 text-sm text-primary">{count} {t('reportsCount')}</span></div><div className="mt-4 h-2 overflow-hidden rounded-full bg-muted"><div className="h-full rounded-full bg-primary transition-all" style={{ width: `${Math.max(8, Math.round((count / maxCount) * 100))}%` }} /></div></div>)}</div></div></section>;
 }
 
 function ReportStatsPanel({ liveCount, stats, loading }: { liveCount: number | null; stats?: ReportStatsData; loading: boolean }) {
   const { t } = useLanguage();
   const value = (number: number | undefined) => typeof number === 'number' ? number.toLocaleString() : '—';
-  const typeCount = (typeId: string) => stats?.byType.find((item) => item.typeId === typeId)?.count;
   return <section className="soft-surface mb-8 rounded-2xl p-5 md:p-7" data-testid="report-stats-panel">
     <div className="flex flex-col justify-between gap-3 md:flex-row md:items-end">
-      <div><p className="eyebrow">{t('reportActivity')}</p><h2 className="display mt-2 text-3xl md:text-4xl">{t('reportsByType')}</h2></div>
-      <span className="flex items-center gap-2 text-xs text-muted-foreground"><span className="status-dot" /> {value(liveCount ?? undefined)} {t('reportingNow')}</span>
+      <div><p className="eyebrow">{t('reportActivity')}</p><h2 className="display mt-2 text-3xl md:text-4xl">{t('publicReporting')}</h2></div>
+      <span className="flex items-center gap-2 text-xs text-muted-foreground"><span className="status-dot" /> {value(liveCount ?? undefined)} {t('publicReporting')}</span>
     </div>
     <div className="mt-6 grid gap-3 sm:grid-cols-3">
-      <div className="surface rounded-xl p-4" data-testid="report-stat-live"><p className="mono text-3xl text-primary">{value(liveCount ?? undefined)}</p><p className="mt-2 text-xs text-muted-foreground">{t('reportingNow')}</p></div>
+      <div className="surface rounded-xl p-4" data-testid="report-stat-live"><p className="mono text-3xl text-primary">{value(liveCount ?? undefined)}</p><p className="mt-2 text-xs text-muted-foreground">{t('publicReporting')}</p></div>
       <div className="surface rounded-xl p-4" data-testid="report-stat-total"><p className="mono text-3xl text-primary">{value(stats?.totalReports)}</p><p className="mt-2 text-xs text-muted-foreground">{t('totalSubmitted')}</p></div>
       <div className="surface rounded-xl p-4" data-testid="report-stat-success"><p className="mono text-3xl text-[hsl(var(--chart-2))]">{value(stats?.successfulReports)}</p><p className="mt-2 text-xs text-muted-foreground">{t('successfulSaved')}</p></div>
     </div>
-    <div className="mt-7"><p className="eyebrow">{t('reportsByType')}</p><div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{reportTypes.map(({ id, title, icon: Icon }) => <div className="surface flex items-center gap-3 rounded-xl p-4" key={id} data-testid={`report-type-stat-${id}`}><span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-muted text-primary"><Icon size={18} /></span><div className="min-w-0"><p className="truncate text-sm font-bold">{t(title)}</p><p className="mono mt-1 text-xs text-muted-foreground">{value(typeCount(id))} {t('reportsCount')}</p></div></div>)}</div></div>
     {loading && <p className="mt-4 text-xs text-muted-foreground">{t('loadingStats')}</p>}
     {!loading && !stats && <p className="mt-4 text-xs text-destructive" role="status">{t('statsUnavailable')}</p>}
   </section>;
