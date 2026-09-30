@@ -16,7 +16,7 @@ type ReportStatsData = Awaited<ReturnType<typeof getReportStats>>;
 const copy = {
   en: {
     tagline: 'a safer first step', overview: 'Overview', homeSection: 'Home', makeReport: 'Make a report', reportSection: 'Report', myReports: 'My reports', helpResources: 'Help & resources',
-    privateSession: 'Current session', liveNow: 'live now', reportActivity: 'Report activity', publicReporting: 'public reporting now', homeLiveByType: 'Live public reporting by type', totalReportsHome: 'total reports', totalSubmitted: 'total reports submitted', successfulSaved: 'successfully saved', reportsByType: 'Reports by type', loadingStats: 'Loading report activity…', statsUnavailable: 'Report activity is temporarily unavailable.', officerView: 'Demo officer view', toggleNav: 'Toggle navigation', footer: 'Nirbhoy · All rights reserved 2026 · Safer documentation portal', sessionOnly: 'Saved report shown in this session',
+    privateSession: 'Current session', liveNow: 'live now', reportActivity: 'Report activity', publicReporting: 'public reporting now', homeLiveByType: 'Live public reporting by type', totalReportsHome: 'total reports', last30Days: 'Last 30 days', dailyReportStats: 'Daily report statistics', todayStats: 'Today', solvedReports: 'Solved', pendingReports: 'Pending', dateLabel: 'Date', totalSubmitted: 'total reports submitted', successfulSaved: 'successfully saved', reportsByType: 'Reports by type', loadingStats: 'Loading report activity…', statsUnavailable: 'Report activity is temporarily unavailable.', officerView: 'Demo officer view', toggleNav: 'Toggle navigation', footer: 'Nirbhoy · All rights reserved 2026 · Safer documentation portal', sessionOnly: 'Saved report shown in this session',
     homeAria: 'Nirbhoy home', storyPace: 'Your story, your pace', heroTitle: 'A safer first step when things don’t feel safe.',
     heroBody: 'Nirbhoy helps you document breakup-related harassment, threats, blackmail, fraud, or stalking — then find a clear next action without pretending to be a police station.',
     startReport: 'Start a report', needHelp: 'I need help right now', noAccount: 'No account. No upload required. Your submitted report is saved securely.',
@@ -68,7 +68,7 @@ const copy = {
   },
   bn: {
     tagline: 'নিরাপদভাবে শুরু করার একটি ধাপ', overview: 'সংক্ষিপ্তসার', homeSection: 'হোম', makeReport: 'অভিযোগ জানান', reportSection: 'রিপোর্ট করুন', myReports: 'আমার রিপোর্ট', helpResources: 'সহায়তা ও রিসোর্স',
-    privateSession: 'বর্তমান সেশন', liveNow: 'জন এখন লাইভ', reportActivity: 'রিপোর্টের সরাসরি হিসাব', publicReporting: 'জন এখন পাবলিক রিপোর্ট করছেন', homeLiveByType: 'ধরন অনুযায়ী লাইভ পাবলিক রিপোর্ট', totalReportsHome: 'মোট রিপোর্ট', totalSubmitted: 'মোট রিপোর্ট জমা হয়েছে', successfulSaved: 'সফলভাবে সংরক্ষিত হয়েছে', reportsByType: 'ধরন অনুযায়ী রিপোর্ট', loadingStats: 'রিপোর্টের হিসাব লোড হচ্ছে…', statsUnavailable: 'এই মুহূর্তে রিপোর্টের হিসাব পাওয়া যাচ্ছে না।', officerView: 'ডেমো অফিসার ভিউ', toggleNav: 'নেভিগেশন খুলুন', footer: '© ২০২৬ নির্ভয় · সর্বস্বত্ব সংরক্ষিত · নিরাপদ রিপোর্ট পোর্টাল', sessionOnly: 'এই সেশনে রিপোর্টটি দেখা যাচ্ছে',
+    privateSession: 'বর্তমান সেশন', liveNow: 'জন এখন লাইভ', reportActivity: 'রিপোর্টের সরাসরি হিসাব', publicReporting: 'জন এখন পাবলিক রিপোর্ট করছেন', homeLiveByType: 'ধরন অনুযায়ী লাইভ পাবলিক রিপোর্ট', totalReportsHome: 'মোট রিপোর্ট', last30Days: 'গত ৩০ দিন', dailyReportStats: 'দিনভিত্তিক রিপোর্টের হিসাব', todayStats: 'আজকের হিসাব', solvedReports: 'সমাধান হয়েছে', pendingReports: 'অমীমাংসিত', dateLabel: 'তারিখ', totalSubmitted: 'মোট রিপোর্ট জমা হয়েছে', successfulSaved: 'সফলভাবে সংরক্ষিত হয়েছে', reportsByType: 'ধরন অনুযায়ী রিপোর্ট', loadingStats: 'রিপোর্টের হিসাব লোড হচ্ছে…', statsUnavailable: 'এই মুহূর্তে রিপোর্টের হিসাব পাওয়া যাচ্ছে না।', officerView: 'ডেমো অফিসার ভিউ', toggleNav: 'নেভিগেশন খুলুন', footer: '© ২০২৬ নির্ভয় · সর্বস্বত্ব সংরক্ষিত · নিরাপদ রিপোর্ট পোর্টাল', sessionOnly: 'এই সেশনে রিপোর্টটি দেখা যাচ্ছে',
     homeAria: 'নির্ভয় হোম', storyPace: 'আপনার কথা, আপনার সময়', heroTitle: 'কিছু নিরাপদ মনে না হলে নিরাপদভাবে শুরু করার একটি ধাপ।',
     heroBody: 'নির্ভয় সম্পর্ক-পরবর্তী হয়রানি, হুমকি, ব্ল্যাকমেইল, প্রতারণা বা অনুসরণ করার ঘটনা লিখে রাখতে এবং পুলিশ স্টেশন সেজে না থেকে পরবর্তী পদক্ষেপ ঠিক করতে সাহায্য করে।',
     startReport: 'রিপোর্ট শুরু করুন', needHelp: 'এই মুহূর্তে সাহায্য দরকার', noAccount: 'অ্যাকাউন্ট লাগবে না। ফাইল আপলোড নয়। শুধু এই সেশনে সংরক্ষিত থাকবে।',
@@ -251,19 +251,47 @@ const demoReportCounts: Record<string, number> = {
   'something-else': 60,
 };
 
+function getDhakaDateKey(date: Date): string {
+  const parts = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Dhaka', year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(date);
+  const year = parts.find((part) => part.type === 'year')?.value ?? '0000';
+  const month = parts.find((part) => part.type === 'month')?.value ?? '00';
+  const day = parts.find((part) => part.type === 'day')?.value ?? '00';
+  return [year, month, day].join('-');
+}
+
+function buildDailyReportStats(rows: ReportStatsData['dailyStats']) {
+  const byDate = new Map(rows.map((row) => [row.date, row] as const));
+  const today = new Date(getDhakaDateKey(new Date()) + 'T00:00:00Z');
+  return Array.from({ length: 30 }, (_, index) => {
+    const day = new Date(today);
+    day.setUTCDate(today.getUTCDate() - 29 + index);
+    const date = day.toISOString().slice(0, 10);
+    const row = byDate.get(date);
+    return { date, total: row?.total ?? 0, solved: row?.solved ?? 0, pending: row?.pending ?? 0 };
+  });
+}
+
+function formatStatsDate(date: string, language: Language) {
+  return new Intl.DateTimeFormat(language === 'bn' ? 'bn-BD' : 'en-US', { timeZone: 'UTC', day: 'numeric', month: 'short' }).format(new Date(date + 'T00:00:00Z'));
+}
+
 function HomeReportPulse({ liveCount }: { liveCount: number | null }) {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [stats, setStats] = useState<ReportStatsData>();
   const [usingDemo, setUsingDemo] = useState(false);
+  const [statsUnavailable, setStatsUnavailable] = useState(false);
   useEffect(() => {
     let mounted = true;
     getReportStats().then((nextStats) => {
       if (!mounted) return;
-      const hasSavedReports = nextStats.totalReports > 0;
-      setStats(hasSavedReports ? nextStats : undefined);
-      setUsingDemo(!hasSavedReports);
+      setStats(nextStats);
+      setUsingDemo(nextStats.totalReports === 0);
+      setStatsUnavailable(false);
     }).catch(() => {
-      if (mounted) setUsingDemo(true);
+      if (mounted) {
+        setUsingDemo(true);
+        setStatsUnavailable(true);
+      }
     });
     return () => { mounted = false; };
   }, []);
@@ -274,7 +302,40 @@ function HomeReportPulse({ liveCount }: { liveCount: number | null }) {
   })).sort((a, b) => b.count - a.count);
   const maxCount = Math.max(...rankedTypes.map((item) => item.count), 1);
   const totalReports = stats?.totalReports || 1000;
-  return <section className="mx-auto max-w-[1440px] px-5 py-14 md:px-16 md:py-20" data-testid="home-report-pulse"><div className="soft-surface rounded-3xl p-5 md:p-8"><div className="flex flex-col justify-between gap-4 md:flex-row md:items-end"><div><p className="eyebrow">{t('reportActivity')}</p><h2 className="display mt-2 text-4xl md:text-5xl">{t('homeLiveByType')}</h2></div><span className="flex items-center gap-2 rounded-full border border-border bg-card px-3 py-2 text-xs font-semibold text-primary"><span className="status-dot" /> {liveCount ?? '—'} {t('publicReporting')}</span></div><div className="mt-6 grid gap-3 sm:grid-cols-2"><div className="surface rounded-2xl p-4" data-testid="home-live-report-count"><p className="mono text-3xl text-primary">{liveCount ?? '—'}</p><p className="mt-2 text-xs text-muted-foreground">{t('publicReporting')}</p></div><div className="surface rounded-2xl p-4" data-testid="home-total-report-count"><p className="mono text-3xl text-primary">{totalReports.toLocaleString()}</p><p className="mt-2 text-xs text-muted-foreground">{t('totalReportsHome')}</p></div></div><div className="mt-8 grid gap-3 md:grid-cols-2">{rankedTypes.map(({ id, title, icon: Icon, count }) => <div className="surface rounded-2xl p-4" key={id} data-testid={`home-report-type-${id}`}><div className="flex items-center justify-between gap-3"><div className="flex min-w-0 items-center gap-3"><span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-muted text-primary"><Icon size={18} /></span><span className="truncate text-sm font-bold">{t(title)}</span></div><span className="mono shrink-0 text-sm text-primary">{count.toLocaleString()} {t('reportsCount')}</span></div><div className="mt-4 h-2 overflow-hidden rounded-full bg-muted"><div className="h-full rounded-full bg-primary transition-all" style={{ width: `${Math.max(8, Math.round((count / maxCount) * 100))}%` }} /></div></div>)}</div></div></section>;
+  const dailyStats = buildDailyReportStats(stats?.dailyStats ?? []);
+  const todayStats = dailyStats[dailyStats.length - 1];
+  const numberLocale = language === 'bn' ? 'bn-BD' : 'en-US';
+  const formatCount = (value: number) => value.toLocaleString(numberLocale);
+
+  return <section className="mx-auto max-w-[1440px] px-5 py-14 md:px-16 md:py-20" data-testid="home-report-pulse">
+    <div className="soft-surface rounded-3xl p-5 md:p-8">
+      <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
+        <div><p className="eyebrow">{t('reportActivity')}</p><h2 className="display mt-2 text-4xl md:text-5xl">{t('homeLiveByType')}</h2></div>
+        <span className="flex items-center gap-2 rounded-full border border-border bg-card px-3 py-2 text-xs font-semibold text-primary"><span className="status-dot" /> {liveCount ?? '—'} {t('publicReporting')}</span>
+      </div>
+      <div className="mt-6 grid gap-3 sm:grid-cols-2">
+        <div className="surface rounded-2xl p-4" data-testid="home-live-report-count"><p className="mono text-3xl text-primary">{liveCount ?? '—'}</p><p className="mt-2 text-xs text-muted-foreground">{t('publicReporting')}</p></div>
+        <div className="surface rounded-2xl p-4" data-testid="home-total-report-count"><p className="mono text-3xl text-primary">{totalReports.toLocaleString()}</p><p className="mt-2 text-xs text-muted-foreground">{t('totalReportsHome')}</p></div>
+      </div>
+      <div className="mt-8 grid gap-3 md:grid-cols-2">
+        {rankedTypes.map(({ id, title, icon: Icon, count }) => <div className="surface rounded-2xl p-4" key={id} data-testid={'home-report-type-' + id}><div className="flex items-center justify-between gap-3"><div className="flex min-w-0 items-center gap-3"><span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-muted text-primary"><Icon size={18} /></span><span className="truncate text-sm font-bold">{t(title)}</span></div><span className="mono shrink-0 text-sm text-primary">{count.toLocaleString()} {t('reportsCount')}</span></div><div className="mt-4 h-2 overflow-hidden rounded-full bg-muted"><div className="h-full rounded-full bg-primary transition-all" style={{ width: Math.max(8, Math.round((count / maxCount) * 100)) + '%' }} /></div></div>)}
+      </div>
+      <div className="mt-10 border-t border-border pt-8">
+        <div className="flex flex-col justify-between gap-3 md:flex-row md:items-end"><div><p className="eyebrow">{t('dailyReportStats')}</p><h3 className="display mt-2 text-3xl">{t('last30Days')}</h3></div><p className="text-xs font-semibold text-muted-foreground">{t('todayStats')} · {formatStatsDate(todayStats.date, language)}</p></div>
+        <div className="mt-5 grid gap-3 sm:grid-cols-3">
+          <div className="surface rounded-xl p-4" data-testid="today-total-reports"><p className="mono text-3xl text-primary">{stats ? formatCount(todayStats.total) : '—'}</p><p className="mt-2 text-xs text-muted-foreground">{t('totalReportsHome')}</p></div>
+          <div className="surface rounded-xl p-4" data-testid="today-solved-reports"><p className="mono text-3xl text-[hsl(var(--chart-2))]">{stats ? formatCount(todayStats.solved) : '—'}</p><p className="mt-2 text-xs text-muted-foreground">{t('solvedReports')}</p></div>
+          <div className="surface rounded-xl p-4" data-testid="today-pending-reports"><p className="mono text-3xl text-destructive">{stats ? formatCount(todayStats.pending) : '—'}</p><p className="mt-2 text-xs text-muted-foreground">{t('pendingReports')}</p></div>
+        </div>
+        {stats ? <div className="mt-5 max-h-[420px] overflow-auto rounded-xl border border-border bg-card">
+          <table className="w-full min-w-[520px] border-collapse text-left text-xs" aria-label={t('dailyReportStats')}>
+            <thead className="sticky top-0 z-10 bg-card text-muted-foreground"><tr><th className="px-4 py-3 font-semibold">{t('dateLabel')}</th><th className="px-4 py-3 text-right font-semibold">{t('totalReportsHome')}</th><th className="px-4 py-3 text-right font-semibold">{t('solvedReports')}</th><th className="px-4 py-3 text-right font-semibold">{t('pendingReports')}</th></tr></thead>
+            <tbody>{[...dailyStats].reverse().map((day) => <tr key={day.date} className={day.date === todayStats.date ? 'border-t border-border bg-muted/60 font-semibold' : 'border-t border-border'} data-testid={day.date === todayStats.date ? 'daily-report-stat-today' : undefined}><td className="px-4 py-3">{formatStatsDate(day.date, language)} <span className="text-muted-foreground">{day.date}</span></td><td className="px-4 py-3 text-right tabular-nums">{formatCount(day.total)}</td><td className="px-4 py-3 text-right tabular-nums">{formatCount(day.solved)}</td><td className="px-4 py-3 text-right tabular-nums">{formatCount(day.pending)}</td></tr>)}</tbody>
+          </table>
+        </div> : <p className="mt-5 rounded-xl border border-border bg-card p-4 text-sm text-muted-foreground" role="status">{statsUnavailable ? t('statsUnavailable') : t('loadingStats')}</p>}
+      </div>
+    </div>
+  </section>;
 }
 
 function ReportFlow({ onCancel, onComplete }: { onCancel: () => void; onComplete: (report: Report) => void }) {

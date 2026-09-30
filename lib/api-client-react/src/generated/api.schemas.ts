@@ -111,6 +111,16 @@ export interface ReportStats {
   /** @minimum 0 */
   successfulReports: number;
   byType: ReportTypeCount[];
+  dailyStats: {
+    /** @format date */
+    date: string;
+    /** @minimum 0 */
+    total: number;
+    /** @minimum 0 */
+    solved: number;
+    /** @minimum 0 */
+    pending: number;
+  }[];
 }
 
 export interface PresenceInput {

@@ -64,7 +64,7 @@ export const CreateReportResponse = zod.object({
 
 
 /**
- * Returns persisted report totals and counts grouped by report type.
+ * Returns persisted report totals, counts by report type, and daily status counts for the last 30 days in Asia/Dhaka.
  * @summary Get report activity statistics
  */
 export const getReportStatsResponseTotalReportsMin = 0;
@@ -73,7 +73,11 @@ export const getReportStatsResponseSuccessfulReportsMin = 0;
 
 export const getReportStatsResponseByTypeItemCountMin = 0;
 
+export const getReportStatsResponseDailyStatsItemTotalMin = 0;
 
+export const getReportStatsResponseDailyStatsItemSolvedMin = 0;
+
+export const getReportStatsResponseDailyStatsItemPendingMin = 0;
 
 export const GetReportStatsResponse = zod.object({
   "totalReports": zod.number().min(getReportStatsResponseTotalReportsMin),
@@ -81,7 +85,13 @@ export const GetReportStatsResponse = zod.object({
   "byType": zod.array(zod.object({
   "typeId": zod.string(),
   "count": zod.number().min(getReportStatsResponseByTypeItemCountMin)
-}))
+})),
+  "dailyStats": zod.array(zod.object({
+    "date": zod.string(),
+    "total": zod.number().min(getReportStatsResponseDailyStatsItemTotalMin),
+    "solved": zod.number().min(getReportStatsResponseDailyStatsItemSolvedMin),
+    "pending": zod.number().min(getReportStatsResponseDailyStatsItemPendingMin)
+  }))
 })
 
 

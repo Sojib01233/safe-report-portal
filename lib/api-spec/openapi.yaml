@@ -64,7 +64,7 @@ paths:
       operationId: getReportStats
       tags: [reports]
       summary: Get report activity statistics
-      description: Returns persisted report totals and counts grouped by report type.
+      description: Returns persisted report totals, counts by report type, and daily status counts for the last 30 days in Asia/Dhaka.
       responses:
         "200":
           description: Report activity statistics
@@ -244,10 +244,33 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/ReportTypeCount"
+        dailyStats:
+          type: array
+          items:
+            type: object
+            properties:
+              date:
+                type: string
+                format: date
+              total:
+                type: number
+                minimum: 0
+              solved:
+                type: number
+                minimum: 0
+              pending:
+                type: number
+                minimum: 0
+            required:
+              - date
+              - total
+              - solved
+              - pending
       required:
         - totalReports
         - successfulReports
         - byType
+        - dailyStats
     ReportTypeCount:
       type: object
       properties:

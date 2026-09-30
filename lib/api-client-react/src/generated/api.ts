@@ -215,7 +215,7 @@ export const getGetReportStatsUrl = () => {
 }
 
 /**
- * Returns persisted report totals and counts grouped by report type.
+ * Returns persisted report totals, counts by report type, and daily status counts for the last 30 days in Asia/Dhaka.
  * @summary Get report activity statistics
  */
 export const getReportStats = async ( options?: Parameters<typeof customFetch>[1]): Promise<ReportStats> => {

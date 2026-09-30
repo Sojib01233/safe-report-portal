@@ -1,6 +1,6 @@
 import { randomInt } from "node:crypto";
 import { Router, type IRouter } from "express";
-import { count } from "drizzle-orm";
+import { and, count, gte, lt, sql } from "drizzle-orm";
 import { db, safeReportsTable } from "@workspace/db";
 import { CreateReportBody, CreateReportResponse } from "@workspace/api-zod";
 
@@ -31,12 +31,28 @@ function formatDateOnly(value: Date): string {
 
 router.get("/reports/stats", async (req, res): Promise<void> => {
   try {
-    const [totalRows, typeRows] = await Promise.all([
+    const [totalRows, typeRows, dailyRows] = await Promise.all([
       db.select({ count: count() }).from(safeReportsTable),
       db
         .select({ typeId: safeReportsTable.typeId, count: count() })
         .from(safeReportsTable)
         .groupBy(safeReportsTable.typeId),
+      db
+        .select({
+          date: sql<string>`to_char((${safeReportsTable.createdAt} AT TIME ZONE 'Asia/Dhaka')::date, 'YYYY-MM-DD')`,
+          total: count(),
+          solved: sql<number>`count(*) FILTER (WHERE ${safeReportsTable.status} = 'Closed')`.mapWith(Number),
+          pending: sql<number>`count(*) FILTER (WHERE ${safeReportsTable.status} <> 'Closed')`.mapWith(Number),
+        })
+        .from(safeReportsTable)
+        .where(
+          and(
+            gte(safeReportsTable.createdAt, sql`(((now() AT TIME ZONE 'Asia/Dhaka')::date - 29)::timestamp AT TIME ZONE 'Asia/Dhaka')`),
+            lt(safeReportsTable.createdAt, sql`(((now() AT TIME ZONE 'Asia/Dhaka')::date + 1)::timestamp AT TIME ZONE 'Asia/Dhaka')`),
+          ),
+        )
+        .groupBy(sql`(${safeReportsTable.createdAt} AT TIME ZONE 'Asia/Dhaka')::date`)
+        .orderBy(sql`(${safeReportsTable.createdAt} AT TIME ZONE 'Asia/Dhaka')::date`),
     ]);
 
     const totalReports = Number(totalRows[0]?.count ?? 0);
@@ -46,6 +62,12 @@ router.get("/reports/stats", async (req, res): Promise<void> => {
       byType: typeRows.map((row) => ({
         typeId: row.typeId,
         count: Number(row.count),
+      })),
+      dailyStats: dailyRows.map((row) => ({
+        date: row.date,
+        total: Number(row.total),
+        solved: Number(row.solved),
+        pending: Number(row.pending),
       })),
     };
 
